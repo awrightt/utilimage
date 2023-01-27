@@ -9,7 +9,7 @@ apt-get install -y \
 curl dnsutils procps \
 tcpdump netcat python3 \
 python3-pip lsof iproute2 \
-vim-nox iputils-ping \
+zip vim xxd iputils-ping \
 iputils-arping iputils-tracepath \
 zsh
 
