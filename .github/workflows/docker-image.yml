@@ -50,4 +50,3 @@ jobs:
         password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
     - name: Publish the Docker image
       run: docker push -a dukekautington/utilimage
-
