@@ -12,3 +12,5 @@ python3-pip lsof iproute2 \
 vim-nox iputils-ping \
 iputils-arping iputils-tracepath \
 zsh
+
+CMD ["true"]
