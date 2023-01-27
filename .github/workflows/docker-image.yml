@@ -1,4 +1,4 @@
-name: Sauce
+name: Scan and Publish
 
 on:
   push:
@@ -37,7 +37,7 @@ jobs:
         download_external_modules: true # optional: download external terraform modules from public git repositories and terraform registry
         #log_level: DEBUG # optional: set log level. Default WARNING
     - name: Build the Docker image
-      run: docker build .// --tag dukekautington/utilimage:$(date +%y.%m.%d.%k) --tag dukekautington/utilimage:latest
+      run: docker build ./utilimage/ --tag dukekautington/utilimage:$(date +%y.%m.%d.%k) --tag dukekautington/utilimage:latest
     - name: Prisma Cloud image scan
       id: scan
       uses: PaloAltoNetworks/prisma-cloud-scan@v1
