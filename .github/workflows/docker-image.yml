@@ -32,15 +32,15 @@ jobs:
         external_checks_dirs: ./checkov
         download_external_modules: true # optional: download external terraform modules from public git repositories and terraform registry
         #log_level: DEBUG # optional: set log level. Default WARNING
+    - name: establish repo variable
+      run: echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
     - name: Dump github context
       run:   echo "$GITHUB_CONTEXT"
       shell: bash
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
-    - name: establish repo variable
-      run: echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
     - name: Test variables
-      run: echo "hello from $GITHUB_REPOSITORY_NAME"
+      run: echo "hello from $REPO_NAME"
     - name: Build the Docker image
       run: docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/utilimage:$(date +%y_%m_%d)" -t "${{ secrets.DOCKERHUB_USERNAME }}/utilimage:latest" .
     - name: Prisma Cloud image scan
