@@ -49,7 +49,7 @@ jobs:
     #     download_external_modules: true # optional: download external terraform modules from public git repositories and terraform registry
     #     #log_level: DEBUG # optional: set log level. Default WARNING
     - name: Build the Docker image
-      run: docker build -t "$DOCKER_USERNAME/$REPO:$(date +%y_%m_%d)" -t "$DOCKER_USERNAME/$REPO:latest" .
+      run: docker build -t "${DOCKER_USERNAME}/${REPO}:$(date +%y_%m_%d)" -t "${DOCKER_USERNAME}/${REPO}:latest" .
     - name: Prisma Cloud image scan
       id: scan
       uses: PaloAltoNetworks/prisma-cloud-scan@v1
