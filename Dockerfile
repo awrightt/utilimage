@@ -15,8 +15,8 @@ zsh
 
 RUN \
 python3 -m pip install -U pip && \
-python3 -m pip install -U pip && \
 python3 -m pip install -U setuptools && \
-python3 -m pip install -U wheel 
+python3 -m pip install -U wheel && \
+apt-get remove -y python3-pip python-pip-whl
 
 CMD ["true"]
