@@ -15,6 +15,7 @@ zsh
 
 RUN \
 python3 -m pip install -U pip && \
+python3 -m pip install -U pip && \
 python3 -m pip install -U setuptools && \
 python3 -m pip install -U wheel 
 
