@@ -37,7 +37,7 @@ jobs:
       env:
         PRISMA_API_URL: https://api4.prismacloud.io
       with:
-        api-key: ${{ secrets.PCC_USER }}::${{ secrets.PCC_PASS }}
+        api-key: ${{ env.PRISMA_USERNAME }}::${{ env.PRISMA_PASSWORD }}
         #directory: "example/examplea"
         #check: CKV_AWS_1 # optional: run only a specific check_id. can be comma separated list
         #skip_check: CKV_AWS_1 # optional: skip a specific check_id. can be comma separated list
@@ -55,15 +55,15 @@ jobs:
       uses: PaloAltoNetworks/prisma-cloud-scan@v1
       with:
         pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
-        pcc_user: ${{ secrets.PCC_USER }}
-        pcc_pass: ${{ secrets.PCC_PASS }}
+        pcc_user: ${{ env.PRISMA_USERNAME }}
+        pcc_pass: ${{ env.PRISMA_PASSWORD }}
         image_name: ${{ env.DOCKER_USERNAME }}/${{ env.REPO }}
     - name: Run yor action
       uses: bridgecrewio/yor-action@main
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
-        username: $DOCKER_USERNAME
-        password: $DOCKER_TOKEN
+        username: ${{ env.DOCKER_USERNAME }}
+        password: ${{ env.DOCKER_TOKEN }}
     - name: Publish the Docker image
-      run: docker push -a $DOCKER_USERNAME/$REPO
+      run: docker push -a ${{ env.DOCKER_USERNAME }}/${{ env.REPO }}
