@@ -57,7 +57,7 @@ jobs:
         pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
         pcc_user: ${{ secrets.PCC_USER }}
         pcc_pass: ${{ secrets.PCC_PASS }}
-        image_name: $DOCKER_USERNAME/$REPO
+        image_name: ${{ env.DOCKER_USERNAME }}/${{ env.REPO }}
     - name: Run yor action
       uses: bridgecrewio/yor-action@main
     - name: Login to Docker Hub
