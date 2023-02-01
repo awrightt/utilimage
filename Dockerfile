@@ -13,7 +13,9 @@ zip vim xxd iputils-ping \
 iputils-arping iputils-tracepath \
 zsh
 
-RUN pip3 install -U pip && \
+RUN \
+pip3 install -U pip && \
+pip3 install -U pip && \
 pip3 install -U setuptools && \
 pip3 install -U wheel 
 
