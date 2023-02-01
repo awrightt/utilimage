@@ -14,9 +14,8 @@ iputils-arping iputils-tracepath \
 zsh
 
 RUN \
-pip3 install -U pip && \
-pip3 install -U pip && \
-pip3 install -U setuptools && \
-pip3 install -U wheel 
+python3 -m pip install -U pip && \
+python3 -m pip install -U setuptools && \
+python3 -m pip install -U wheel 
 
 CMD ["true"]
