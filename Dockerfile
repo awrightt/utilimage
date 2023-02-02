@@ -14,7 +14,7 @@ curl/bullseye-backports
 
 RUN \
 apt-get update && \
-apt-get install -y \
+apt-get install -y -t bullseye-backports \
 dnsutils procps \
 tcpdump netcat \
 # python3 \
