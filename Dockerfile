@@ -10,7 +10,8 @@ apt-get update && \
 apt-get install -y \
 libcurl3-gnutls/bullseye-backports \ 
 git/bullseye-backports \ 
-curl/bullseye-backports
+curl/bullseye-backports && \
+apt-get upgrade -y
 
 RUN \
 apt-get update && \
