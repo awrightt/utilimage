@@ -7,6 +7,8 @@ RUN \
 echo "This section is reserved for addressing vulnerabilities" && \
 echo 'deb http://deb.debian.org/debian bullseye-backports main' >> /etc/apt/sources.list && \
 apt-get update && \
+apt-get remove -y libaom0 && \
+apt-get autoremove -y && \ 
 apt-get install -y \
 libcurl3-gnutls/bullseye-backports \ 
 git/bullseye-backports \ 
