@@ -8,11 +8,11 @@ on:
 
 env:
   REPO: ${{ github.event.repository.name }}
-  DOCKER_USERNAME: ${{ env.DOCKERHUB_USERNAME }}
+  DOCKER_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
   DOCKER_TOKEN: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
   PRISMA_USERNAME: ${{ secrets.PCC_USER }}
   PRISMA_PASSWORD: ${{ secrets.PCC_PASS }}
-  PRISMA_API_URL: ${{ env.PRISMA_API_URL }}
+  PRISMA_API_URL: ${{ vars.PRISMA_API_URL }}
 
 jobs:
 
