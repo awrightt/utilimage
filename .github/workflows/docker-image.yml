@@ -8,10 +8,11 @@ on:
 
 env:
   REPO: ${{ github.event.repository.name }}
-  DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKER_USERNAME: ${{ env.DOCKERHUB_USERNAME }}
   DOCKER_TOKEN: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
   PRISMA_USERNAME: ${{ secrets.PCC_USER }}
   PRISMA_PASSWORD: ${{ secrets.PCC_PASS }}
+  PRISMA_API_URL: ${{ env.PRISMA_API_URL }}
 
 jobs:
 
@@ -34,8 +35,8 @@ jobs:
     - name: Run Bridgecrew 
       id: Bridgecrew
       uses: bridgecrewio/bridgecrew-action@master
-      env:
-        PRISMA_API_URL: https://api4.prismacloud.io
+      # env:
+      #   PRISMA_API_URL: https://api4.prismacloud.io
       with:
         api-key: ${{ env.PRISMA_USERNAME }}::${{ env.PRISMA_PASSWORD }}
         #directory: "example/examplea"
