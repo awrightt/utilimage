@@ -25,7 +25,12 @@ tcpdump netcat \
 lsof iproute2 \
 zip vim xxd iputils-ping \
 iputils-arping iputils-tracepath \
-zsh
+zsh openssh-client autojump fzf \
+  && sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended \
+  && git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions \
+  && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting \
+  && git clone https://github.com/frodenas/bosh-zsh-autocomplete-plugin.git ~/.oh-my-zsh/plugins/bosh \
+  && sed -i 's/^plugins=.*/plugins=\(git\ zsh-autosuggestions\ zsh-syntax-highlighting\ bosh\ autojump\ fzf\ python\)/' $HOME/.zshrc
 
 RUN \
 python3 -m pip install -U pip && \
