@@ -23,7 +23,7 @@ tcpdump netcat \
 lsof iproute2 \
 zip vim xxd iputils-ping \
 iputils-arping iputils-tracepath \
-zsh openssh-client autojump fzf
+zsh openssh-client autojump 
 
 RUN \
 python3 -m pip install -U pip && \
@@ -53,7 +53,8 @@ RUN  sudo mkdir -p /home/linuxbrew/.linuxbrew \
   && echo '# Set PATH, MANPATH, etc., for Homebrew.' >> $HOME/.zshrc \
   && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.zshrc \
   && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
-  && /bin/bash -c "NONINTERACTIVE=1 $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  && /bin/bash -c "NONINTERACTIVE=1 $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
+  && brew install fzf
 
 
 
