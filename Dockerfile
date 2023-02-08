@@ -54,7 +54,7 @@ RUN  sudo mkdir -p /home/linuxbrew/.linuxbrew \
   && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.zshrc \
   && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
   && /bin/bash -c "NONINTERACTIVE=1 $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
-  && brew install fzf
+  && /home/linuxbrew/.linuxbrew/bin/brew install fzf
 
 
 
