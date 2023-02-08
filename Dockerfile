@@ -29,7 +29,8 @@ RUN \
 python3 -m pip install -U pip && \
 python3 -m pip install -U setuptools && \
 python3 -m pip install -U wheel && \
-apt-get remove -y python3-pip python-pip-whl
+apt-get remove -y python3-pip python-pip-whl \
+   && sudo apt-get autoremove -yq libapr1 libaprutil1 
 
 RUN useradd -Um -u 1000 -G sudo  -d /home/sauce -s /usr/bin/zsh sauce \
   && sed -i 's/%sudo.*/%sudo\ \ \ ALL=NOPASSWD\:ALL/' /etc/sudoers 
@@ -57,7 +58,8 @@ RUN  sudo mkdir -p /home/linuxbrew/.linuxbrew \
   && /home/linuxbrew/.linuxbrew/bin/brew install fzf 
   
 RUN sed -i '/^plugins/ i export FZF_BASE=/home/linuxbrew/.linuxbrew/opt/fzf' $HOME/.zshrc \
-    && /home/linuxbrew/.linuxbrew/opt/fzf/install --all
+    && /home/linuxbrew/.linuxbrew/opt/fzf/install --all \
+    && /home/linuxbrew/.linuxbrew/bin/brew install lsd apr apr-util
 
 
 
