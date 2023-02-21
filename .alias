@@ -1,0 +1,21 @@
+if [ -x "$(command -v lsd)" ]; then
+    alias ls="lsd"
+    alias ll="lsd -lah"
+    alias lrt="lsd -lrt"
+    alias l.='lsd -d .*'
+elif [ -x "$(command -v exa)" ]; then
+    alias ls="exa"
+    alias ll="exa -la"
+    alias lrt="exa -l -s time"
+    alias l.='exa -D .*'
+else
+    alias ls='ls -G'
+    alias ll='ls -la'
+    alias lrt="ls -lrt"
+    alias l.='ls -d .* --color=auto'
+fi
+alias nodes="kubectl get nodes -o name | sed 's/node\///'"
+alias pcf='docker run -it -v $PWD:/persist --rm dukekautington/pcf_client zsh' 
+alias dfimage="docker run -v /var/run/docker.sock:/var/run/docker.sock --rm alpine/dfimage"
+[[ -f /opt/homebrew/bin/kubectl ]] && alias k=kubectl
+which bridgecrew > /dev/null  && alias bc=bridgecrew
