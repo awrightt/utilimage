@@ -18,7 +18,7 @@ apt-get upgrade -y
 RUN \
 apt-get update && \
 apt-get install -y -t bullseye-backports \
-dnsutils procps sudo kubectl \
+dnsutils procps sudo \
 tcpdump netcat \
 lsof iproute2 \
 zip vim xxd iputils-ping \
@@ -63,6 +63,8 @@ RUN sed -i '/^plugins/ i export FZF_BASE=/home/linuxbrew/.linuxbrew/opt/fzf' $HO
     && /home/linuxbrew/.linuxbrew/opt/fzf/install --all \
     && /home/linuxbrew/.linuxbrew/bin/brew install lsd apr apr-util
 
+RUN curl -sL "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" | sudo tee /bin/kubectl >/dev/null \
+    && sudo chmod a+rx /bin/kubectl    
 
 
 CMD ["true"]
