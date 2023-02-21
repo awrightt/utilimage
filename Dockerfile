@@ -18,7 +18,7 @@ apt-get upgrade -y
 RUN \
 apt-get update && \
 apt-get install -y -t bullseye-backports \
-dnsutils procps sudo \
+dnsutils procps sudo kubectl \
 tcpdump netcat \
 lsof iproute2 \
 zip vim xxd iputils-ping \
@@ -37,6 +37,7 @@ RUN useradd -Um -u 1000 -G sudo  -d /home/sauce -s /usr/bin/zsh sauce \
 
 USER 1000 
 WORKDIR /home/sauce/
+COPY .alias /home/sauce/
 
 RUN touch ~/.zshrc \
   && sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended \
@@ -46,7 +47,8 @@ RUN touch ~/.zshrc \
   && git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k \
   && sed -i 's/^ZSH_THEME\=.*/ZSH_THEME\=\"powerlevel10k\/powerlevel10k\"/' $HOME/.zshrc \
   && curl -s -H "token: IGFsaWFzIGxsPSJleGEgLWxhIgog" https://node.kaut.io/api/data/power10k | base64 -d > $HOME/.p10k.zsh \
-  && echo 'POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true' >> ~/.zshrc 
+  && echo 'POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true' >> ~/.zshrc \
+  && echo 'source $HOME/.alias' >> $HOME/.zshrc
 
 #RUN [[ `uname -m` == aarch32 || `uname -m` == aarch64 ]] || sudo mkdir -p /home/linuxbrew/.linuxbrew \
 RUN  sudo mkdir -p /home/linuxbrew/.linuxbrew \
