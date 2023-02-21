@@ -47,8 +47,9 @@ RUN touch ~/.zshrc \
   && git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k \
   && sed -i 's/^ZSH_THEME\=.*/ZSH_THEME\=\"powerlevel10k\/powerlevel10k\"/' $HOME/.zshrc \
   && curl -s -H "token: IGFsaWFzIGxsPSJleGEgLWxhIgog" https://node.kaut.io/api/data/power10k | base64 -d > $HOME/.p10k.zsh \
-  && echo 'POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true' >> ~/.zshrc \
-  && echo 'source $HOME/.alias' >> $HOME/.zshrc
+  && echo 'POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true' >> ~/.zshrc \ 
+  && echo 'source $HOME/.alias' >> $HOME/.zshrc \
+  && sudo chown 1000:1000 $HOME/.alias
 
 #RUN [[ `uname -m` == aarch32 || `uname -m` == aarch64 ]] || sudo mkdir -p /home/linuxbrew/.linuxbrew \
 RUN  sudo mkdir -p /home/linuxbrew/.linuxbrew \
