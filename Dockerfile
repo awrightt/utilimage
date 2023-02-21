@@ -55,7 +55,8 @@ RUN touch ~/.zshrc \
 RUN  sudo mkdir -p /home/linuxbrew/.linuxbrew \
   && sudo chown -R $(whoami) /home/linuxbrew \
   && echo '# Set PATH, MANPATH, etc., for Homebrew.' >> $HOME/.zshrc \
-  && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.zshrc \
+  && sed -i '/^source\ \$HOME\/.alias/i eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' .zshrc
+  #&& echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.zshrc \
   && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
   && /bin/bash -c "NONINTERACTIVE=1 $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
   && /home/linuxbrew/.linuxbrew/bin/brew install fzf 
