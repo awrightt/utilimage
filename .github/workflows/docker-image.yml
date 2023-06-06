@@ -49,16 +49,20 @@ jobs:
     #     external_checks_dirs: ./checkov
     #     download_external_modules: true # optional: download external terraform modules from public git repositories and terraform registry
     #     #log_level: DEBUG # optional: set log level. Default WARNING
+    - name: Assign build number
+      run: |
+        echo "BUILD_ID=$(date +'%y_%m_%d')" >> $GITHUB_ENV
     - name: Build the Docker image
-      run: docker build -t "$DOCKER_USERNAME/$REPO:$(date +%y_%m_%d)" -t "$DOCKER_USERNAME/$REPO:latest" .
-    # - name: Prisma Cloud image scan
-    #   id: scan
-    #   uses: PaloAltoNetworks/prisma-cloud-scan@v1
-    #   with:
-    #     pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
-    #     pcc_user: ${{ env.PRISMA_USERNAME }}
-    #     pcc_pass: ${{ env.PRISMA_PASSWORD }}
-    #     image_name: ${{ env.DOCKER_USERNAME }}/${{ env.REPO }}
+      # run: docker build -t "$DOCKER_USERNAME/$REPO:$(date +%y_%m_%d)" -t "$DOCKER_USERNAME/$REPO:latest" .
+      run: docker build -t "$DOCKER_USERNAME/$REPO:$BUILD_ID" -t "$DOCKER_USERNAME/$REPO:latest" .
+    - name: Prisma Cloud image scan
+      id: scan
+      uses: PaloAltoNetworks/prisma-cloud-scan@v1
+      with:
+        pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
+        pcc_user: ${{ env.PRISMA_USERNAME }}
+        pcc_pass: ${{ env.PRISMA_PASSWORD }}
+        image_name: ${{ env.DOCKER_USERNAME }}/${{ env.REPO }}
     # - name: Run yor action
     #   uses: bridgecrewio/yor-action@main
     - name: Login to Docker Hub
