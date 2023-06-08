@@ -48,15 +48,16 @@ RUN touch ~/.zshrc \
   && sed -i 's/^ZSH_THEME\=.*/ZSH_THEME\=\"powerlevel10k\/powerlevel10k\"/' $HOME/.zshrc \
   && curl -s -H "token: IGFsaWFzIGxsPSJleGEgLWxhIgog" https://node.kaut.io/api/data/power10k | base64 -d > $HOME/.p10k.zsh \
   && echo 'POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true' >> ~/.zshrc \ 
-  && echo 'source $HOME/.alias' >> $HOME/.zshrc \
+  # && echo 'source $HOME/.alias' >> $HOME/.zshrc \
   && sudo chown 1000:1000 $HOME/.alias
 
+  # && sed -i '/^source\ \$HOME\/.alias/i eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' .zshrc \
 #RUN [[ `uname -m` == aarch32 || `uname -m` == aarch64 ]] || sudo mkdir -p /home/linuxbrew/.linuxbrew \
 RUN  sudo mkdir -p /home/linuxbrew/.linuxbrew \
   && sudo chown -R $(whoami) /home/linuxbrew \
   && echo '# Set PATH, MANPATH, etc., for Homebrew.' >> $HOME/.zshrc \
-  && sed -i '/^source\ \$HOME\/.alias/i eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' .zshrc \
-  #&& echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.zshrc \
+  && sed -i '/^POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD/a eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' .zshrc \
+  # && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.zshrc \
   && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
   && /bin/bash -c "NONINTERACTIVE=1 $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
   && /home/linuxbrew/.linuxbrew/bin/brew install fzf 
@@ -66,7 +67,8 @@ RUN sed -i '/^plugins/ i export FZF_BASE=/home/linuxbrew/.linuxbrew/opt/fzf' $HO
     && /home/linuxbrew/.linuxbrew/bin/brew install lsd apr apr-util
 
 RUN curl -sL "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" | sudo tee /bin/kubectl >/dev/null \
-    && sudo chmod a+rx /bin/kubectl    
+    && sudo chmod a+rx /bin/kubectl    \
+    && echo 'source $HOME/.alias' >> $HOME/.zshrc 
 
 
 CMD ["true"]

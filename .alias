@@ -17,5 +17,5 @@ fi
 alias nodes="kubectl get nodes -o name | sed 's/node\///'"
 alias pcf='docker run -it -v $PWD:/persist -e TZ=America/Chicago -e ZSH_THEME=amuse --rm dukekautington/pcf_client zsh'
 alias dfimage="docker run -v /var/run/docker.sock:/var/run/docker.sock --rm alpine/dfimage"
-[[ -x `which kubetl` ]] && alias k=kubectl
+[[ -x `which kubectl` ]] && alias k=kubectl
 which bridgecrew > /dev/null  && alias bc=bridgecrew
