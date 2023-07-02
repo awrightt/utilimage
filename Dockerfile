@@ -64,7 +64,7 @@ RUN  if [[ $(uname -m) == "x86_64" ]] ; then  sudo mkdir -p /home/linuxbrew/.lin
   && sed -i '/^POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD/a eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' .zshrc \
   && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
   && /bin/bash -c "NONINTERACTIVE=1 $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
-  && /home/linuxbrew/.linuxbrew/bin/brew install fzf ; else echo "Brew only supported on x86_64" ; fi 
+  ; else echo "Brew only supported on x86_64" ; fi 
   
 # RUN if [[ $(uname -m) == "x86_64" ]] ; then sed -i '/^plugins/ i export FZF_BASE=/home/linuxbrew/.linuxbrew/opt/fzf' $HOME/.zshrc \
 #     && /home/linuxbrew/.linuxbrew/opt/fzf/install --all \
