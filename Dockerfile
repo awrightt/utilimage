@@ -34,7 +34,7 @@ apt-get remove -y python3-pip python-pip-whl \
 
 RUN useradd -Um -u 1000 -G sudo  -d /home/sauce -s /usr/bin/zsh sauce \
   && sed -i 's/%sudo.*/%sudo\ \ \ ALL=NOPASSWD\:ALL/' /etc/sudoers 
-
+SHELL ["/bin/bash", "-c"]
 RUN if [[ $(uname -m) == "aarch64" ]] ; then arch="arm64" ; else arch="amd64" ; fi \
   && curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/$arch/kubectl \
   && chmod a+x /usr/bin/kubectl 
