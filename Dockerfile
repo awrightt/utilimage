@@ -35,6 +35,10 @@ apt-get remove -y python3-pip python-pip-whl \
 RUN useradd -Um -u 1000 -G sudo  -d /home/sauce -s /usr/bin/zsh sauce \
   && sed -i 's/%sudo.*/%sudo\ \ \ ALL=NOPASSWD\:ALL/' /etc/sudoers 
 
+RUN if [[ $(uname -m) == "aarch64" ]] ; then arch="arm64" ; else arch="amd64" ; fi \
+  && curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/$arch/kubectl \
+  && chmod a+x /usr/bin/kubectl 
+
 USER 1000 
 WORKDIR /home/sauce/
 COPY .alias /home/sauce/
@@ -53,22 +57,20 @@ RUN touch ~/.zshrc \
 
   # && sed -i '/^source\ \$HOME\/.alias/i eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' .zshrc \
 #RUN [[ `uname -m` == aarch32 || `uname -m` == aarch64 ]] || sudo mkdir -p /home/linuxbrew/.linuxbrew \
-RUN  sudo mkdir -p /home/linuxbrew/.linuxbrew \
+RUN  if [[ $(uname -m) == "x86_64" ]] ; then  sudo mkdir -p /home/linuxbrew/.linuxbrew \
   && sudo chown -R $(whoami) /home/linuxbrew \
   && echo '# Set PATH, MANPATH, etc., for Homebrew.' >> $HOME/.zshrc \
   && sed -i '/^POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD/a eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' .zshrc \
-  # && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.zshrc \
   && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
   && /bin/bash -c "NONINTERACTIVE=1 $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
-  && /home/linuxbrew/.linuxbrew/bin/brew install fzf 
+  && /home/linuxbrew/.linuxbrew/bin/brew install fzf ; else echo "Brew only supported on x86_64" ; fi 
   
-RUN sed -i '/^plugins/ i export FZF_BASE=/home/linuxbrew/.linuxbrew/opt/fzf' $HOME/.zshrc \
+RUN if [[ $(uname -m) == "x86_64" ]] ; then sed -i '/^plugins/ i export FZF_BASE=/home/linuxbrew/.linuxbrew/opt/fzf' $HOME/.zshrc \
     && /home/linuxbrew/.linuxbrew/opt/fzf/install --all \
-    && /home/linuxbrew/.linuxbrew/bin/brew install lsd apr apr-util
+    && /home/linuxbrew/.linuxbrew/bin/brew install lsd apr apr-util ; fi
 
-RUN curl -sL "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" | sudo tee /bin/kubectl >/dev/null \
-    && sudo chmod a+rx /bin/kubectl    \
-    && echo 'source $HOME/.alias' >> $HOME/.zshrc 
+RUN echo 'source $HOME/.alias' >> $HOME/.zshrc 
+
 
 
 CMD ["true"]
