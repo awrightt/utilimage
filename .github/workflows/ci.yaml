@@ -1,25 +1,91 @@
-on: [ push, workflow_dispatch ]
+name: Scan and Publish
+
+on:
+  push:
+    branches: [ "master", "main" ] 
+  pull_request:
+    branches: [ "master", "main" ] 
 
 env:
-  IMAGE_NAME: ${{ github.repository }}:${{ github.sha }}
+  REPO: ${{ github.event.repository.name }}
+  DOCKER_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+  DOCKER_TOKEN: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+  PRISMA_USERNAME: ${{ secrets.PCC_USER }}
+  PRISMA_PASSWORD: ${{ secrets.PCC_PASS }}
+  PRISMA_API_URL: ${{ vars.PRISMA_API_URL }}
+  BUILD_DIR: "."
 
 jobs:
-  build-and-scan:
-    name: Build and scan image
+
+
+  build:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-      - name: Build the image
-        run: docker build -t $IMAGE_NAME .
-
-      - name: Prisma Cloud image scan
-        id: scan
-        uses: PaloAltoNetworks/prisma-cloud-scan@v1.5
-        with:
-          pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
-          pcc_user: ${{ secrets.PCC_USER }}
-          pcc_pass: ${{ secrets.PCC_PASS }}
-          image_name: ${{ env.IMAGE_NAME }}
+    # - name: Dump github context
+    #   run:   echo "$GITHUB_CONTEXT"
+    #   shell: bash
+    #   env:
+    #     GITHUB_CONTEXT: ${{ toJson(github) }}
+    # - name: Test variables
+    #   run: echo "hello from $REPO"
+    # - name: Run Bridgecrew 
+    #   id: Bridgecrew
+    #   uses: bridgecrewio/bridgecrew-action@master
+    #   # env:
+    #   #   PRISMA_API_URL: https://api4.prismacloud.io
+    #   with:
+    #     api-key: ${{ env.PRISMA_USERNAME }}::${{ env.PRISMA_PASSWORD }}
+    #     #directory: "example/examplea"
+    #     #check: CKV_AWS_1 # optional: run only a specific check_id. can be comma separated list
+    #     #skip_check: CKV_AWS_1 # optional: skip a specific check_id. can be comma separated list
+    #     soft_fail: true
+    #     #framework: terraform # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
+    #     output_format: cli
+    #     quiet: false
+    #     external_checks_dirs: ./checkov
+    #     download_external_modules: true # optional: download external terraform modules from public git repositories and terraform registry
+    #     #log_level: DEBUG # optional: set log level. Default WARNING
+    - name: Assign build number
+      run: |
+        echo "BUILD_ID=$(date +'%y_%m_%d')" >> $GITHUB_ENV
+    - name: Lowercase the repo name for docker hub
+      run: |
+        echo "REPO=`echo $REPO | tr '[:upper:]' '[:lower:]'`" >> $GITHUB_ENV
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ env.DOCKER_USERNAME }}
+        password: ${{ env.DOCKER_TOKEN }}
+    - name: Build the Docker image for scanning purposes
+      run: |
+        docker build -t "$DOCKER_USERNAME/$REPO:$BUILD_ID" $BUILD_DIR
+    - name: Prisma Cloud image scan
+      id: scan
+      uses: PaloAltoNetworks/prisma-cloud-scan@v1
+      with:
+        pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
+        pcc_user: ${{ env.PRISMA_USERNAME }}
+        pcc_pass: ${{ env.PRISMA_PASSWORD }}
+        image_name: ${{ env.DOCKER_USERNAME }}/${{ env.REPO }}:${{env.BUILD_ID}}
+    - name: Run yor action
+      uses: bridgecrewio/yor-action@main
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: ${{env.BUILD_DIR}}  # Path to the Dockerfile and build context
+        platforms: linux/amd64,linux/arm64  # Specify the desired platforms
+        push: true 
+        tags: |
+            ${{env.DOCKER_USERNAME}}/${{env.REPO}}:${{env.BUILD_ID}}
+            ${{env.DOCKER_USERNAME}}/${{env.REPO}}:latest
+    # Not needed since it is pushed in the above step
+    # - name: Publish the Docker image
+    #   run: docker push -a ${{ env.DOCKER_USERNAME }}/${{ env.REPO }}
