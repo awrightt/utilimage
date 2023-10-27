@@ -1,6 +1,6 @@
 FROM python:3.11.4-bookworm
 
-LABEL maintainer="lonkaut@gmail.com"
+LABEL maintainer="alexwright"
 ARG DEBIAN_FRONTEND=noninteractive
 
 
